@@ -1,0 +1,84 @@
+﻿@using MyCeima.ViewModel
+@model List<Movies>
+
+
+
+<main class="container my-5">
+
+
+    <!-- Filer Section -->
+    <div class="title-wrapper">
+        <h1 class="page-title">@ViewBag.CatID.name Cinema</h1>
+        <p class="page-subtitle">Manage • Discover • Experience</p>
+    </div>
+
+    <style>
+        .title-wrapper {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #111; /* professional black */
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+            /* Elegant red underline */
+            .page-title::after {
+                content: '';
+                display: block;
+                width: 80px;
+                height: 4px;
+                margin: 10px auto 0;
+                background: #e50914; /* professional red */
+                border-radius: 2px;
+            }
+
+        .page-subtitle {
+            margin-top: 12px;
+            font-size: 1.1rem;
+            color: #555; /* softer grey */
+            font-weight: 400;
+            letter-spacing: 1.5px;
+        }
+    </style>
+
+
+    <br /><br />
+
+    <div class="row g-4">
+
+
+
+        <!-- Movie Card Example -->
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card movie-card">
+                    <img src="~/images/@item.ImgUrl" class="card-img-top" alt="Movie Poster">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Description.Substring(0, 60)....</p>
+                        <p><strong>Cenima:</strong> @item.Cinema.name</p>
+                        <p><strong>Start:</strong> @item.StartDate</p>
+                        <p><strong>End:</strong> @item.EndDate</p>
+                        <p><strong>Price:</strong> @item.Price.ToString("c")</p>
+                        <p><strong>Category:</strong> @item.Category.Name</p>
+                        <p><strong>Status:</strong> <span class="text-success">@item.MovieStatus</span></p>
+                        <div class="d-flex justify-content-between">
+                            <a href="/Customer/Home/Details/@item.Id" class="btn btn-outline-primary">Details</a>
+                            <a href="#" class="btn btn-primary">Book Ticket</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</main>

@@ -1,0 +1,608 @@
+﻿@using MyCeima.ViewModel
+@model List<Movies>
+
+@{
+
+    int i = 1;
+
+    DateTime today = DateTime.Today;
+
+}
+
+@section Scripts {
+
+    @if (@TempData["Success-Message"] is not null)
+    {
+        <script>
+            toastr.success('@TempData["Success-Message"]')
+        </script>
+    }
+    else if (TempData["Error-Message"] is not null)
+    {
+        <script>
+            toastr.error('@TempData["Error-message"]')
+        </script>
+    }
+}
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scarlet Screen | Cinematic Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0808;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Title Styles */
+        .title-container {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+        }
+
+        .main-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            color: #ff0000;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-container::before, .title-container::after {
+            content: '';
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            margin: 15px auto;
+            width: 70%;
+            max-width: 500px;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ff4d4d;
+            margin-top: 10px;
+        }
+
+        .disabled-link {
+            pointer-events: none; /* makes it unclickable */
+            opacity: 0.6; /* faded look */
+            background-color: #555 !important; /* darker disabled color */
+            cursor: not-allowed; /* shows blocked cursor */
+        }
+
+        /* Film Strip Effect */
+        .film-strip {
+            height: 30px;
+            background: repeating-linear-gradient( to bottom, #000 0px, #000 8px, #8b0000 8px, #8b0000 16px, #000 16px, #000 24px, #8b0000 24px, #8b0000 30px );
+            opacity: 0.8;
+            margin: 30px 0;
+        }
+
+        .custom-select-dark {
+            background-color: #111; /* dark background */
+            color: #ff4d4d; /* red text */
+            border: 2px solid #ff4d4d; /* red border */
+            border-radius: 40px; /* pill shape */
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+            appearance: none; /* remove default arrow */
+            background-image: url("data:image/svg+xml;utf8,<svg fill='red' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .custom-select-dark:focus {
+                outline: none;
+                background-color: #1a1a1a;
+                border-color: #ff1a1a;
+                box-shadow: 0 0 12px rgba(255, 26, 26, 0.7);
+            }
+
+        /* Movie Content Grid */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .movie-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.4);
+            border: 1px solid #8b0000;
+        }
+
+            .movie-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5);
+            }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 2px solid #ff0000;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #ff4d4d;
+        }
+
+        .movie-description {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 10px 20px;
+            width: 100%;
+            max-width: 800px; /* wider for 3 inputs */
+            border: 1px solid #8b0000;
+            gap: 10px; /* space between inputs */
+        }
+
+            .search-box input {
+                background: transparent;
+                border: none;
+                color: white;
+                padding: 10px;
+                flex: 1;
+                font-size: 1rem;
+                outline: none;
+                border-bottom: 1px solid #8b0000;
+            }
+
+        .movie-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* reduced gap */
+            margin-top: 15px;
+        }
+
+        .custom-input-dark {
+            background-color: #111; /* dark background */
+            color: #ff4d4d; /* red text */
+            border: 2px solid #ff4d4d; /* red border */
+            border-radius: 40px; /* pill shape */
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+            transition: all 0.3s ease;
+        }
+
+            .custom-input-dark::placeholder {
+                color: #ff8080; /* softer red placeholder */
+                opacity: 0.8;
+            }
+
+            .custom-input-dark:focus {
+                outline: none;
+                background-color: #1a1a1a;
+                border-color: #ff1a1a;
+                box-shadow: 0 0 12px rgba(255, 26, 26, 0.7);
+                color: #fff;
+            }
+
+
+        /* Shared style */
+        .btn-cinema {
+            text-decoration: none;
+            padding: 8px 18px; /* smaller padding */
+            border-radius: 40px; /* still rounded but tighter */
+            font-size: 0.9rem; /* smaller text */
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+
+        /* Details Button */
+        .btn-details {
+            background: #000;
+            color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+            .btn-details:hover {
+                background: #ff4d4d;
+                color: #000;
+                box-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+                transform: translateY(-2px);
+            }
+
+        /* Book Ticket Button */
+        .btn-book {
+            background: linear-gradient(135deg, #ff1a1a, #990000);
+            color: #fff;
+            border: 2px solid #ff1a1a;
+        }
+
+            .btn-book:hover {
+                background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+                box-shadow: 0 0 12px rgba(255, 26, 26, 0.7);
+                transform: translateY(-2px);
+            }
+            .search-box button {
+                background: #ff0000;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: 0.3s;
+                color: #000;
+                font-weight: bold;
+            }
+
+                .search-box button:hover {
+                    background: #ff4d4d;
+                }
+
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .nav-pills {
+            display: flex;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #8b0000;
+        }
+
+            .nav-pills a {
+                color: #ccc;
+                text-decoration: none;
+                padding: 8px 15px;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+            }
+
+                .nav-pills a:hover, .nav-pills a.active {
+                    background: #ff0000;
+                    color: #000;
+                }
+
+        /* Responsive Design */
+      
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Film Strip Decorations -->
+        <div class="film-strip"></div>
+
+        <!-- Creative Title Section -->
+        <div class="title-container">
+            <h1 class="main-title">Scarlet Screen</h1>
+            <p class="subtitle">Darkness Reveals The Light</p>
+        </div>
+
+        <div class="film-strip"></div>
+
+        <!-- Navigation -->
+        @* <div class="nav-container">
+            <div class="nav-pills">
+                <a href="#" class="active">Home</a>
+                <a href="#">Movies</a>
+                <a href="#">Genres</a>
+                <a href="#">New Releases</a>
+                <a href="#">Collections</a>
+            </div>
+        </div> *@
+
+        <!-- Search Box -->
+        <!-- Search Box -->
+        <div class="search-container">
+            <form class="search-box" >
+                <div class="col-md-2">
+                    <input type="text" class="form-control custom-input-dark"
+                           placeholder="Enter Name..." name="NameMV">
+                </div>
+
+
+                <div class="col-md-3">
+                    <select class="form-select custom-select-dark" name="CategoryId">
+                        <option selected disabled>-- Choose a Category --</option>
+                        @foreach (var item in ViewBag.Category)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </div>
+
+
+                <div class="col-md-3">
+                    <select class="form-select custom-select-dark" name="CinemaId" >
+                        <option selected disabled>-- Choose a Cinema --</option>
+                        @foreach (var item in ViewBag.Cima)
+                        {
+                            <option value="@item.Id">@item.name</option>
+                        }
+                    </select>
+                </div>
+
+
+                <div >
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm" g>
+                        🔎 Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- Movies Grid -->
+        <div class="movies-grid">
+            @if(Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="movie-card">
+                        <img src="~/images/@item.ImgUrl" alt="Movie Poster" class="movie-poster">
+
+                        <div class="movie-info">
+                            <h3 class="movie-title">@item.Name</h3>
+                            <p class="movie-description">
+                                @item.Description.Substring(0, Math.Min(item.Description.Length, 60))...
+                            </p>
+
+                            <p><strong>Cinema:</strong> @item.Cinema.name</p>
+                            <p><strong>Start:</strong> @item.StartDate.ToString("dd MMM yyyy hh:mm tt")</p>
+                            <p><strong>End:</strong> @item.EndDate.ToString("dd MMM yyyy hh:mm tt")</p>
+                            <p><strong>Price:</strong> @item.Price.ToString("c")</p>
+                            <p>
+                                <strong>Category:</strong>
+                                <a href="/Customer/Home/CategoryCollection/@item.Category.Id" class="category-link">
+                                    @item.Category.Name
+                                </a>
+                            </p>
+
+                            @if (item.StartDate > today)
+                            {
+                                <p><strong>Status: </strong>@MovieStatus.Upcoming</p>
+                            }
+                            else if (item.StartDate < today)
+                            {
+                                <p><strong>Status: </strong>@MovieStatus.Expired</p>
+                            }
+                            else if (item.StartDate == today)
+                            {
+                                <p><strong>Status: </strong>@MovieStatus.Available</p>
+                            }
+
+                            <div class="movie-actions">
+                                <a href="/Customer/Home/Details/@item.Id" class="btn-cinema btn-details">
+                                    <i class="fas fa-film"></i> Details
+                                </a>
+                                @if (item.StartDate < today)
+                                {
+                                    <!-- Disabled state -->
+                                    <a class="btn-cinema btn-book disabled-link">
+                                        <i class="fas fa-ticket-alt"></i> Book Ticket
+                                    </a>
+                                }
+                                else
+                                {
+                                    <!-- Normal clickable -->
+                                    <a href="/Customer/Cart/AddToCart/@item.Id" class="btn-cinema btn-book">
+                                        <i class="fas fa-ticket-alt"></i> Book Ticket
+                                    </a>
+                                }
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <div class="no-movies-wrap d-flex align-items-center justify-content-center">
+                    <div class="no-movies-card text-center p-5 rounded-4 shadow-lg">
+                        <div class="icon-x mb-3">✖</div>
+                        <h1 class="display-4 fw-bold text-light mb-2">No Movies Found</h1>
+                        <div class="accent-bar mx-auto mb-4"></div>
+                        <p class="text-secondary mb-4">Try adjusting your search or browse other categories.</p>
+
+                        <!-- Back button -->
+                        <button class="btn btn-red px-4 py-2 rounded-pill fw-semibold"
+                                type="button"
+                                onclick="history.back()">
+                            ⟵ Go Back
+                        </button>
+                    </div>
+                </div>
+
+                <style>
+                    .no-movies-wrap {
+                        min-height: 60vh;
+                        background: radial-gradient(60% 80% at 50% 0%, rgba(229,9,20,0.18), rgba(0,0,0,0)), linear-gradient(180deg, #0b0b0b 0%, #000 100%);
+                        padding: 48px 16px;
+                    }
+
+                    .no-movies-card {
+                        max-width: 720px;
+                        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+                        border: 1px solid rgba(229,9,20,0.3);
+                        position: relative;
+                    }
+
+                        .no-movies-card::before {
+                            content: "";
+                            position: absolute;
+                            inset: -2px;
+                            background: linear-gradient(135deg, rgba(229,9,20,0.5), rgba(0,0,0,0) 40%, rgba(229,9,20,0.4) 80%);
+                            filter: blur(8px);
+                            z-index: -1;
+                            border-radius: 1.25rem;
+                            opacity: .35;
+                        }
+
+                    .icon-x {
+                        font-size: 2.25rem;
+                        color: #ff2735;
+                        text-shadow: 0 0 16px rgba(229,9,20,0.55);
+                    }
+
+                    .accent-bar {
+                        width: 140px;
+                        height: 4px;
+                        background: linear-gradient(90deg,#ff2735, #8b0000);
+                        border-radius: 999px;
+                        box-shadow: 0 0 18px rgba(229,9,20,0.6);
+                    }
+
+                    .btn-red {
+                        background: transparent;
+                        color: #fff;
+                        border: 2px solid #ff2735;
+                        box-shadow: 0 0 12px rgba(229,9,20,0.35) inset;
+                        transition: all .2s ease;
+                    }
+
+                        .btn-red:hover {
+                            background: #ff2735;
+                            color: #000;
+                            box-shadow: 0 8px 24px rgba(229,9,20,0.35), 0 0 12px rgba(229,9,20,0.6) inset;
+                            transform: translateY(-1px);
+                        }
+
+                    .text-secondary {
+                        color: #a7a7a7 !important;
+                    }
+                </style>
+            }
+        
+        </div>
+
+
+        <div class="film-strip"></div>
+    </div>
+
+    <script>
+        // Simple script for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add active class to navigation items
+            const navItems = document.querySelectorAll('.nav-pills a');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if ((ViewBag.Current - 1) >= 1)
+        {
+            <a class="page-link" href="/Customer/Home/Index?page=@(ViewBag.Current - 1)">Pervious</a>
+        }
+        else
+        {
+            <a class="page-link disabled" href="/Customer/Home/Index?page=@(ViewBag.Current + 1)">Pervious</a>
+        }
+
+
+        @for (i = 1; i < ViewBag.Move; i++)
+        {
+            if (i == ViewBag.Current)
+            {
+                <li class="page-item active"> <a class="page-link" href="/Customer/Home/Index/@i">@i</a></li>
+            }
+            else
+            {
+
+                <li class="page-item "> <a class="page-link" href="/Customer/Home/Index?page=@i">@i</a></li>
+            }
+        }
+
+        <li class="page-item">
+            @if ((ViewBag.Current + 1) < ViewBag.Move)
+            {
+                <a class="page-link" href="/Customer/Home/Index?page=@(ViewBag.Current + 1)">Next</a>
+            }
+            else
+            {
+                <a class="page-link disabled" href="/Customer/Home/Index?page=@(ViewBag.Current + 1)">Next</a>
+            }
+
+        </li>
+    </ul>
+</nav>
+
+
+
+
+
+</html>

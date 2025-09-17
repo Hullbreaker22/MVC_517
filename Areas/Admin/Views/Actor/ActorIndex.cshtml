@@ -1,0 +1,165 @@
+﻿@model List<Actor>
+
+
+@section Scripts
+{
+    @if (TempData["Success-Message"] is not null)
+    {
+        <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+        <script>
+            toastr.success('@TempData["Success-Message"]')
+        </script>
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cinema Management</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            background: #fff;
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, #4cc9f0, #4361ee);
+            color: #fff;
+            font-weight: bold;
+            border-radius: 30px;
+            padding: 10px 20px;
+            transition: transform 0.2s ease;
+        }
+
+            .btn-create:hover {
+                transform: scale(1.05);
+            }
+
+        .table {
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+            .table thead th {
+                background-color: #f1f3f5;
+                color: #495057;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+                border: none;
+            }
+
+            .table tbody tr {
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .table tbody td {
+                vertical-align: middle;
+                border: none;
+            }
+
+        .btn-edit {
+            background-color: #198754;
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.85rem;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.85rem;
+        }
+
+            .btn-edit:hover, .btn-delete:hover {
+                opacity: 0.85;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3 ms-5">
+            <h1 class="page-title">Actor Management</h1>
+            <a href="/Admin/Actor/CreateActor" class="btn btn-create">
+                <i class="bi bi-plus-circle"></i> Create New Cinema
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-11 ms-5">
+                <div class="card">
+                    <table class="table table-borderless align-middle">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>bio</th>
+                                <th>News</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.Bio.Substring(0, 20)</td>
+                                    <td>@if (item.News.Length < 50)
+                                        {
+                                            @item.News
+                                        }
+                                        else
+                                        {
+                                            @item.News.Substring(0,50)
+                                        }...
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href="/Admin/Actor/EditActor/@item.Id" class="btn btn-edit">
+                                            <i class="bi bi-pencil-fill"></i> Edit
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

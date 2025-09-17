@@ -1,0 +1,206 @@
+﻿@using MyCeima.Repository
+@using MyCeima.ViewModel
+@model NewClass
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Page</title>
+    <!-- Loading new Google Font (Bungee Shade) -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .movie-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .movie-poster {
+            flex: 1;
+        }
+
+            .movie-poster img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .movie-details {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* UPDATED MOVIE TITLE FONT */
+        .movie-title {
+            font-family: 'Bungee Shade', cursive;
+            font-size: 2.8rem; /* Slightly smaller to fit bold font */
+            color: #e50914;
+            margin: 0 0 20px 0; /* Removed top margin */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1.1; /* Improves spacing */
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            min-width: 120px;
+            color: #555;
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        .price-tag {
+            background: #e50914;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .actors {
+            display: flex;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .actor {
+            text-align: center;
+        }
+
+            .actor img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 3px solid #e50914;
+            }
+
+        .actor-name {
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .trailer {
+            margin-top: auto;
+            background: #222;
+            border-radius: 8px;
+            overflow: hidden; /* Ensures video stays within bounds */
+        }
+
+        .trailer-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .trailer iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .trailer h3 {
+            color: white;
+            margin: 0;
+            padding: 15px 15px 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="movie-container">
+        <div class="movie-poster">
+            <img src="~/images/@Model.myMov.ImgUrl" alt="Movie Poster">
+        </div>
+
+        <div class="movie-details">
+            <h1 class="movie-title">@Model.myMov.Name</h1>
+
+            <div class="detail-row">
+                <span class="detail-label">Price:</span>
+                <span class="detail-value"><span class="price-tag">@Model.myMov.Price</span></span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Cinema Type:</span>
+                <span class="detail-value">@Model.myMov.Cinema.name</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Start Date:</span>
+                <span class="detail-value">@Model.myMov.StartDate</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">End Date:</span>
+                <span class="detail-value">@Model.myMov.EndDate</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Category:</span>
+                <span class="detail-value">@Model.myMov.Category</span>
+            </div>
+
+            <h3>Starring:</h3>
+            <div class="actors">
+                <!-- Actor 1 with clickable photo -->
+              
+                      @foreach(var item in Model.Act)
+                {
+                    <div class="actor">
+                        <a href="/Customer/Home/ActorDetails/@item.Actor.Id">
+                            <img class="actor-photo" src="~/cast/@item.Actor.ProfilePictuer" alt="Chris Redfield">
+                        </a>
+                        <div class="actor-name">@item.Actor.FirstName</div>
+                    </div>
+                }
+
+            
+
+                <!-- Actor 2 with clickable photo -->               
+            </div>
+
+
+            <div class="trailer">
+                <h3>Watch the Trailer</h3>
+                <div style="padding:56.25% 0 0 0;position:relative;">
+                    <iframe width="80%" height="400"
+                            src="https://www.youtube.com/embed/TcMBFSGVi1c"
+                            title="Avengers: Endgame Trailer"
+                            frameborder="0" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

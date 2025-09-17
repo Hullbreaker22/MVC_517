@@ -1,0 +1,10 @@
+﻿@section Scripts
+{
+    @if(TempData["Success-Message"] is not null)
+{
+        <script>
+            toastr.success('@TempData["Success-Message"]')
+        </script>  
+}
+
+}

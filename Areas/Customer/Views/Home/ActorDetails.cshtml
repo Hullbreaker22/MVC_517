@@ -1,0 +1,255 @@
+﻿@using MyCeima.ViewModel
+@model SecondClass
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor Profile | The Shadow Legacy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f8f9fa;
+            --accent: #ffba08;
+            --dark: #121212;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark);
+            color: white;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+            /* Smoke/Dust Effect */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 45%), radial-gradient(circle at 40% 60%, rgba(255,255,255,0.03) 0%, transparent 40%);
+                background-size: 200% 200%;
+                animation: smokeAnimation 20s infinite alternate;
+                z-index: -1;
+            }
+
+       body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    animation: simplePulse 3s infinite alternate;
+}
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+        }
+
+        .actor-header {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 60px;
+            align-items: center;
+            background: rgba(18, 18, 18, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .actor-photo {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            box-shadow: 0 0 30px rgba(230, 57, 70, 0.5), 0 0 60px rgba(230, 57, 70, 0.2);
+            transition: transform 0.5s ease;
+        }
+
+            .actor-photo:hover {
+                transform: rotate(5deg) scale(1.03);
+            }
+
+        .actor-info {
+            flex: 1;
+        }
+
+        .actor-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin: 0 0 15px 0;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+            .actor-name::after {
+                content: '';
+                position: absolute;
+                bottom: -15px;
+                left: 0;
+                width: 100px;
+                height: 4px;
+                background: var(--primary);
+                box-shadow: 0 2px 10px var(--primary);
+            }
+
+        .actor-age {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .actor-bio {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin: 80px 0 40px;
+            text-align: center;
+            position: relative;
+        }
+
+            .gallery-title::before,
+            .gallery-title::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                width: 30%;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            }
+
+            .gallery-title::before {
+                left: 0;
+            }
+
+            .gallery-title::after {
+                right: 0;
+            }
+
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 80px;
+        }
+
+        .gallery-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            filter: grayscale(30%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+            .gallery-photo:hover {
+                transform: scale(1.15) rotate(-5deg);
+                filter: grayscale(0%);
+                box-shadow: 0 0 20px var(--primary), 0 5px 30px rgba(0,0,0,0.5);
+                z-index: 10;
+            }
+
+        .back-button {
+            display: block;
+            width: 220px;
+            margin: 0 auto;
+            padding: 18px 30px;
+            background: linear-gradient(135deg, var(--primary), #c1121f);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 25px rgba(230, 57, 70, 0.4);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .back-button::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                transition: 0.5s;
+            }
+
+            .back-button:hover::before {
+                left: 100%;
+            }
+
+            .back-button:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 35px rgba(230, 57, 70, 0.6);
+            }
+
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="actor-header">
+            <img src="~/cast/@Model.Actor.ProfilePictuer" alt="Chris Redfield" class="actor-photo">
+            <div class="actor-info">
+                <h1 class="actor-name">@Model.Actor.FirstName</h1>
+                <p class="actor-bio">
+                    @Model.Actor.Bio
+                </p>
+            </div>
+        </div>
+
+        <h2 class="gallery-title">Filmography Highlights</h2>
+        <div class="photo-gallery">
+           @foreach(var item in Model.Movies)
+            {
+                 <a href="/Customer/Home/Details/@item.Movie.Id" >
+                <img src="~/images/@item.Movie.ImgUrl" alt="The Shadow Legacy (2023)" class="gallery-photo">
+                </a>
+            }
+        </div>
+
+        <a href="/Customer/Home/Index" class="back-button">← Back to Movie</a>
+    </div>
+</body>
+</html>
+</html>

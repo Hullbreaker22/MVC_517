@@ -1,0 +1,326 @@
+﻿@model List<ApplicationUser>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .create-btn {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(75, 108, 183, 0.3);
+            transition: all 0.3s ease;
+        }
+
+            .create-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(75, 108, 183, 0.4);
+            }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 16px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f9fbfd;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #e7f6ec;
+            color: #0b9b41;
+        }
+
+        .status-inactive {
+            background-color: #feeeee;
+            color: #f14e4e;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-details {
+            background-color: #e1efff;
+            color: #2c78f6;
+        }
+
+            .btn-details:hover {
+                background-color: #cfe4ff;
+            }
+
+        .btn-delete {
+            background-color: #ffecec;
+            color: #f54d4d;
+        }
+
+            .btn-delete:hover {
+                background-color: #ffdede;
+            }
+
+        .btn-lock {
+            background-color: #fff4e6;
+            color: #f90;
+        }
+
+            .btn-lock:hover {
+                background-color: #ffebd1;
+            }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4b6cb7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        @@media (max-width: 768px) {
+            th, td
+
+        {
+            padding: 12px 8px;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            font-size: 0.85rem;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>User Management</h1>
+            <a href="/Admin/User/CreateUser" class="create-btn">
+                <i class="fas fa-plus"></i> Create New User
+            </a>
+
+        </header>
+
+        <div class="card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Lock Status</th>   <!-- ✅ new column -->
+                            <th>Confirm Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="avatar">@item.Name.Substring(0, 2).ToUpper()</div>
+                                        @item.Name
+                                    </div>
+                                </td>
+
+                                <td>@item.Email</td>
+
+                                <!-- ✅ Lock status check -->
+                                @if (item.LockoutEnabled == true )
+                                {
+                                    <td><span class="status status-inactive">Locked</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="status status-active">Available</span></td>
+                                }
+
+                                @if (item.EmailConfirmed)
+                                {
+                                    <td><span class="status status-active">Active</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="status status-inactive">InActive</span></td>
+                                }
+
+                                <td>
+                                    <a href="/User/Details" class="btn btn-details">
+                                        <i class="fas fa-info-circle"></i> Details
+                                    </a>
+                                    <a href="/Admin/User/UserDelete/@item.Id"
+                                       class="btn btn-delete delete-btn"
+                                       data-id="@item.Id">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                    <a href="/Admin/User/LockUnlock/@item.Id" class="btn btn-lock">
+                                        <i class="fas fa-lock"></i> Lock
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    +
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Attach SweetAlert to all delete buttons
+        document.querySelectorAll('.delete-btn').forEach(button => {
+          button.addEventListener('click', function (e) {
+            e.preventDefault(); // Stop normal link action
+            let url = this.getAttribute('href');
+
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "This action cannot be undone!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#6c757d',
+              confirmButtonText: 'Yes, delete it!',
+              cancelButtonText: 'Cancel'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirect to delete URL
+                window.location.href = url;
+              }
+            });
+          });
+        });
+    </script>
+   
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Attach SweetAlert to all delete buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.preventDefault(); // Stop normal link action
+        let url = this.getAttribute('href');
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "This action cannot be undone!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Redirect to delete URL
+            window.location.href = url;
+          }
+        });
+      });
+    });
+</script>

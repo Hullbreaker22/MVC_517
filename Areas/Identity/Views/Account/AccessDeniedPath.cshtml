@@ -1,0 +1,298 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+
+@section Styles {
+    <style>
+        header, footer {
+            display: none !important;
+        }
+    </style>
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost in Space | 404 Error</title>
+    <style>
+        /* Reset only what's necessary for the error page */
+        .error-page-container * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .error-page-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e29;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .error-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 700px;
+            background: rgba(13, 18, 48, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0, 183, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .error-page-container h1 {
+            font-size: 8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #6fe2ff, #8466f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(111, 226, 255, 0.5);
+        }
+
+        .error-page-container h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #6fe2ff;
+        }
+
+        .error-page-container p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: #a2c1e0;
+        }
+
+        .error-astronaut {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: error-float 6s ease-in-out infinite;
+        }
+
+        .error-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #6b5ce7, #3399ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 0.5rem;
+            box-shadow: 0 5px 15px rgba(51, 153, 255, 0.4);
+        }
+
+            .error-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
+            }
+
+        .error-btn-secondary {
+            background: transparent;
+            border: 2px solid #3399ff;
+            color: #3399ff;
+        }
+
+        /* Space background elements */
+        .error-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .error-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: error-twinkle linear infinite;
+        }
+
+        .error-planet {
+            position: fixed;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #8466f9, #6b5ce7);
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            box-shadow: 0 0 60px rgba(132, 102, 249, 0.6);
+            z-index: 2;
+        }
+
+        .error-comet {
+            position: fixed;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(111, 226, 255, 0.8) 100%);
+            transform-origin: left;
+            z-index: 2;
+            animation: error-comet 10s linear infinite;
+        }
+
+        /* Animations */
+        @@keyframes error-float {
+            0%
+
+        {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+
+        }
+
+        @@keyframes error-twinkle {
+            0%
+
+        {
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes error-comet {
+            0%
+
+        {
+            transform: rotate(0deg) translateX(0);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: rotate(70deg) translateX(100vw);
+            opacity: 0;
+        }
+
+        }
+
+        /* Responsive design */
+        @@media (max-width: 768px) {
+            .error-page-container h1
+
+        {
+            font-size: 5rem;
+        }
+
+        .error-page-container h2 {
+            font-size: 1.5rem;
+        }
+
+        .error-content {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+
+        .error-planet {
+            width: 200px;
+            height: 200px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Your existing layout content would be here -->
+    <!-- Error page section - you can place this wherever you need in your layout -->
+    <section class="error-page-container">
+        <!-- Background elements -->
+        <div class="error-stars" id="error-stars"></div>
+        <div class="error-planet"></div>
+
+        <!-- Main content -->
+        <div class="error-content">
+            <div class="error-astronaut">👨‍🚀</div>
+            <h1>404</h1>
+            <h2>Houston, we have a problem!</h2>
+            <p>It seems you've drifted into the unknown regions of our digital universe. The page you're looking for is nowhere to be found in our star charts.</p>
+            <div class="error-actions">
+                <a href="/Customer/Home/Index" class="error-btn">Return to Home Base</a>              
+            </div>
+        </div>
+    </section>
+
+    <!-- More of your existing layout content would be here -->
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('error-stars');
+        const starCount = 150;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('error-star');
+
+            const size = Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 100}vh`;
+
+            const duration = 2 + Math.random() * 10;
+            const delay = Math.random() * 5;
+            star.style.animationDuration = `${duration}s`;
+            star.style.animationDelay = `${delay}s`;
+
+            starsContainer.appendChild(star);
+        }
+
+        // Create occasional comets
+        function createComet() {
+            const comet = document.createElement('div');
+            comet.classList.add('error-comet');
+
+            const length = 100 + Math.random() * 200;
+            comet.style.width = `${length}px`;
+
+            comet.style.left = `${Math.random() * 20}vw`;
+            comet.style.top = `${Math.random() * 30}vh`;
+
+            const duration = 5 + Math.random() * 15;
+            comet.style.animationDuration = `${duration}s`;
+
+            document.querySelector('.error-page-container').appendChild(comet);
+
+            // Remove comet after animation completes
+            setTimeout(() => {
+                comet.remove();
+            }, duration * 1000);
+        }
+
+        // Create comets at intervals
+        setInterval(createComet, 5000);
+        createComet(); // Initial comet
+    </script>
+</body>
+</html>

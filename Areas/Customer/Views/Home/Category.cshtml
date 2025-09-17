@@ -1,0 +1,455 @@
+﻿@using MyCeima.ViewModel
+@model List<Category>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oceanic Movie Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px; /* ✅ only here */
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 105, 148, 0.15);
+            border: 2px solid #006994;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(90deg, #006994, #ff3b3f, #006994);
+            opacity: 0.8;
+        }
+
+        .corner-decoration {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+        }
+
+        .corner-top-left {
+            top: 0;
+            left: 0;
+            border-top: 4px solid #006994;
+            border-left: 4px solid #006994;
+        }
+
+        .corner-top-right {
+            top: 0;
+            right: 0;
+            border-top: 4px solid #ff3b3f;
+            border-right: 4px solid #ff3b3f;
+        }
+
+        .corner-bottom-left {
+            bottom: 0;
+            left: 0;
+            border-bottom: 4px solid #ff3b3f;
+            border-left: 4px solid #ff3b3f;
+        }
+
+        .corner-bottom-right {
+            bottom: 0;
+            right: 0;
+            border-bottom: 4px solid #006994;
+            border-right: 4px solid #006994;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px; /* Reduced from 40px */
+            
+            position: relative;
+            margin: 0;
+        }
+
+            header::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 200px;
+                height: 4px;
+                background: linear-gradient(90deg, #006994, #ff3b3f);
+                border-radius: 2px;
+            }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #006994;
+            text-shadow: 2px 2px 0px rgba(0, 105, 148, 0.1);
+            margin-bottom: 5px; /* Reduced from default */
+            position: relative;
+            display: inline-block;
+        }
+
+            h1::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: linear-gradient(90deg, #006994, #ff3b3f);
+                border-radius: 3px;
+            }
+
+        .subtitle {
+            color: #5d7a8c;
+            font-size: 1.2rem;
+            letter-spacing: 1.5px;
+            margin-top: 5px; /* Reduced from 15px */
+        }
+
+        .categories-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+            margin: 10px 0; /* Reduced from 20px */
+        }
+
+            .categories-table th {
+                background: linear-gradient(135deg, #006994, #004d73);
+                color: white;
+                text-align: left;
+                padding: 15px 20px; /* Reduced top/bottom padding */
+                font-size: 1.4rem;
+                font-weight: 600;
+                border-radius: 10px 10px 0 0;
+                box-shadow: 0 5px 15px rgba(0, 105, 148, 0.2);
+            }
+
+        .category-row {
+            background: linear-gradient(to right, #f8faff, #ffffff);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 105, 148, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #006994;
+        }
+
+            .category-row:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 105, 148, 0.2);
+                border-left: 4px solid #ff3b3f;
+            }
+
+        .category-name {
+            padding: 15px 20px; /* Reduced padding */
+            font-weight: 600;
+            color: #006994;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            border-right: 1px dashed #ccddee;
+        }
+
+        .category-icon {
+            margin-right: 15px;
+            color: #ff3b3f;
+            font-size: 1.8rem;
+            width: 40px;
+            text-align: center;
+            background: #e6f2ff;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .action-cell {
+            padding: 15px 20px; /* Reduced padding */
+            text-align: center;
+        }
+
+        .show-movies-btn {
+            background: linear-gradient(135deg, #006994, #004d73);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 105, 148, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .show-movies-btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: all 0.5s ease;
+            }
+
+            .show-movies-btn:hover {
+                background: linear-gradient(135deg, #ff3b3f, #d10000);
+                box-shadow: 0 6px 15px rgba(255, 59, 63, 0.4);
+            }
+
+                .show-movies-btn:hover::before {
+                    left: 100%;
+                }
+
+            .show-movies-btn i {
+                margin-left: 8px;
+                transition: transform 0.3s ease;
+            }
+
+            .show-movies-btn:hover i {
+                transform: translateX(5px);
+            }
+
+        .movie-list {
+            display: none;
+            padding: 15px; /* Reduced padding */
+            background: #e6f2ff;
+            border-radius: 10px;
+            margin-top: 10px; /* Reduced from 15px */
+            border-left: 4px solid #ff3b3f;
+        }
+
+            .movie-list ul {
+                list-style-type: none;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px; /* Reduced gap */
+            }
+
+            .movie-list li {
+                padding: 8px 10px 8px 25px; /* Reduced padding */
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 3px 8px rgba(0, 105, 148, 0.1);
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+                .movie-list li::before {
+                    content: '▶';
+                    color: #ff3b3f;
+                    font-size: 0.8rem;
+                    position: absolute;
+                    left: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+
+                .movie-list li:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 12px rgba(0, 105, 148, 0.2);
+                    color: #006994;
+                }
+
+        footer {
+            text-align: center;
+            margin-top: 30px; /* Reduced from 50px */
+            color: #5d7a8c;
+            font-size: 1rem;
+            padding: 15px; /* Reduced padding */
+            border-top: 1px solid #ccddee;
+        }
+
+        .film-strip {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0; /* Reduced from 30px */
+            gap: 5px;
+        }
+
+        .film-frame {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #006994, #ff3b3f);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .film-frame::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background: #2c3e50;
+            }
+
+            .film-frame::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 10px;
+                background: #2c3e50;
+            }
+
+        .film-hole {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+        }
+
+            .film-hole:nth-child(1) {
+                top: 20px;
+                left: 10px;
+            }
+
+            .film-hole:nth-child(2) {
+                top: 20px;
+                right: 10px;
+            }
+
+            .film-hole:nth-child(3) {
+                bottom: 20px;
+                left: 10px;
+            }
+
+            .film-hole:nth-child(4) {
+                bottom: 20px;
+                right: 10px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="corner-decoration corner-top-left"></div>
+        <div class="corner-decoration corner-top-right"></div>
+        <div class="corner-decoration corner-bottom-left"></div>
+        <div class="corner-decoration corner-bottom-right"></div>
+        <div class="wave-decoration"></div>
+
+        <header>
+            <h1>Category Collection</h1>
+            <p class="subtitle">Dive into our movie collection</p>
+        </header>
+
+        <div class="film-strip">
+            <div class="film-frame">
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+            </div>
+            <div class="film-frame">
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+            </div>
+            <div class="film-frame">
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+            </div>
+            <div class="film-frame">
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+            </div>
+        </div>
+
+        <table class="categories-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Movie Categories</th>
+                </tr>
+            </thead>
+            <tbody>
+               @foreach(var item in Model)
+                {
+                    <tr class="category-row">
+                        <td class="category-name">
+                            <span class="category-icon"><i class="fas fa-fire"></i></span>
+                            @item.Name
+                        </td>
+                        <td class="action-cell">
+                            <a class="show-movies-btn" onclick="toggleMovies('action')" href="/Customer/Home/CategoryCollection/@item.Id">
+                                Show Movies <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    
+    </div>
+
+    <script>
+        function toggleMovies(categoryId) {
+            const movieList = document.getElementById(categoryId);
+            const button = movieList.previousElementSibling;
+            const icon = button.querySelector('i');
+
+            if (movieList.style.display === 'block') {
+                movieList.style.display = 'none';
+                button.innerHTML = 'Show Movies <i class="fas fa-chevron-right"></i>';
+            } else {
+                // Close any open movie lists
+                const allMovieLists = document.querySelectorAll('.movie-list');
+                const allButtons = document.querySelectorAll('.show-movies-btn');
+
+                allMovieLists.forEach(list => {
+                    list.style.display = 'none';
+                });
+
+                allButtons.forEach(btn => {
+                    btn.innerHTML = 'Show Movies <i class="fas fa-chevron-right"></i>';
+                });
+
+                // Open the selected one
+                movieList.style.display = 'block';
+                button.innerHTML = 'Hide Movies <i class="fas fa-chevron-down"></i>';
+            }
+        }
+    </script>
+</body>
+</html>

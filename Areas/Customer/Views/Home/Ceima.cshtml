@@ -1,0 +1,137 @@
+﻿@using MyCeima.ViewModel
+@model List<Cinema>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* RESET – removes all browser default spacing */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* important for flex layout */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(90deg, #0066cc, #ff3b3f);
+            color: white;
+            
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+            header h1 {
+                font-size: 2.5rem;
+                font-weight: 600;
+            }
+
+        .container {
+            flex: 1; /* makes this take remaining space and push footer down */
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0066cc;
+            padding: 15px;
+            border-bottom: 3px solid #ff3b3f;
+        }
+
+        td {
+            background: #f9fbff;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #2c3e50;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #0066cc, #004080);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px!important;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn:hover {
+                background: linear-gradient(90deg, #ff3b3f, #cc0000);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(90deg, #0066cc, #ff3b3f);
+            margin-top: auto; /* ensures footer sits at bottom */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎬 Cinema Collection</h1>
+    </header>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Cinema Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item  in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.name
+                            <a class="btn" href="/Customer/Home/CenimaCollection/@item.Id">Show Movies</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

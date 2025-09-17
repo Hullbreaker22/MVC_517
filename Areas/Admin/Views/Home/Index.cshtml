@@ -1,0 +1,95 @@
+﻿@model Collection
+
+
+<div class="main-content">
+    <div class="dashboard-header">
+        <h1>Dashboard Overview</h1>
+        <p>Manage your Movies, Cinemas, Categories, and Actors efficiently</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="summary-card">
+                <i class="bi bi-film"></i>
+                <h3>@Model.Movies.Count</h3>
+                <p>Movies</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card">
+                <i class="bi bi-building"></i>
+                <h3>@Model.Cinemas.Count</h3>
+                <p>Cinemas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card">
+                <i class="bi bi-tags"></i>
+                <h3>@Model.Categories.Count</h3>
+                <p>Categories</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="summary-card">
+                <i class="bi bi-person-badge"></i>
+                <h3>@Model.Actors.Count</h3>
+                <p>Actors</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-box">
+        <h4 class="mb-3">Movies by Category</h4>
+        <canvas id="moviesChart" height="120"></canvas>
+    </div>
+
+    <!-- Table -->
+    <div class="movie-table">
+        <h4 class="mb-3">Movies List</h4>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Movie Name</th>
+                    <th>Category</th>
+                    <th>Cinema</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Avengers: Endgame</td>
+                    <td>Action</td>
+                    <td>Cinema City</td>
+                    <td>2025-01-05</td>
+                    <td>2025-02-10</td>
+                    <td><span class="badge bg-success">Available</span></td>
+                </tr>
+                <tr>
+                    <td>The Godfather</td>
+                    <td>Drama</td>
+                    <td>Grand Hall</td>
+                    <td>2025-03-01</td>
+                    <td>2025-04-15</td>
+                    <td><span class="badge bg-warning text-dark">Coming Soon</span></td>
+                </tr>
+                <tr>
+                    <td>Frozen II</td>
+                    <td>Animation</td>
+                    <td>Kids Cinema</td>
+                    <td>2025-02-20</td>
+                    <td>2025-03-25</td>
+                    <td><span class="badge bg-danger">Sold Out</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MyMovies. All Rights Reserved.</p>
+    </footer>
+</div>
